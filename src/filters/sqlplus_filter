@@ -38,7 +38,7 @@ use File::Find;
 use IO::Handle;
 
 my $banner = "Loading sqlwrap plugin";
-my $share  = '/usr/share/rlwrap/completions/';
+my $share = ($ENV{'RLWRAP_HOME'} or '/usr/share/rlwrap/completions') . '/';
 
 # Debug
 # open (my $logfh, '>', '/tmp/debug') or die "aaaaaarrgh: $!\n";
