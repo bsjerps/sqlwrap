@@ -1,0 +1,22 @@
+#!/bin/bash
+#============================================================================
+# Title       : sqlwrap
+# Description : Wrapper script for sqlplus with rlwrap and completion
+# Author      : Bart Sjerps <bart@outrun.nl>
+# License     : GPLv3+
+# ---------------------------------------------------------------------------
+
+die() { echo "$(basename $0) error: $@" >&2 ; exit 10 ; }
+
+# Run sqlwrap from $HOME/bin (non-root), we assume /usr/bin/sqlwrap does not exist:
+test -x /usr/bin/sqlwrap || export RLWRAP_HOME=$HOME/sqlwrap/completions RLWRAP_FILTERDIR=$HOME/sqlwrap/filters/
+
+case $1 in
+  -\?) man $(basename $0) ; exit;;
+esac
+
+test -x /usr/bin/rlwrap          || die "rlwrap not found"
+test -d $ORACLE_HOME             || die "ORACLE_HOME not found"
+test -x $ORACLE_HOME/bin/sqlplus || die "sqlplus not found"
+
+exec rlwrap -U -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"

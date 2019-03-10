@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Convert manpage to github .md format and put it in ../doc
+
+die()   { echo "$(basename $0) error: $@" >&2 ; exit 20 ; }
+
+man2html=/usr/bin/man2html
+
+test -x $man2html || die "man2html not found"
+
+cat ../src/man1/sqlwrap.1 | man2html \
+	| tail -n+3 \
+	| sed "s/<TITLE.*//" \
+	| awk '!/\<B\>/ { print } /\<B\>/ {print $0;getline}' \
+	| sed "s|/cgi-bin/man/man2html|https://linux.die.net/man/1/man2html|" \
+	> ../doc/sqlwrap.md
+

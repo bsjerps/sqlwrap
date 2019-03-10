@@ -1,0 +1,108 @@
+.TH SQLWRAP "1" "February 2019" "Outrun" "Oracle Utilities"
+.SH NAME
+sqlwrap \- command and filename completion for Oracle SQL*Plus
+.SH SYNOPSIS
+.B sqlwrap
+.I <parameters>
+.SH DESCRIPTION
+.B sqlwrap
+executes 'rlwrap sqlplus' with parameters to enable command history
+and command completion for .sql scripts and sql commands.
+.PP
+sqlwrap uses an rlwrap filter 'sqlplus_filter' which reads all sql scripts
+in the current working directory and $SQLPATH (and subdirs), prepends them with '@' 
+and adds them as possible completions
+when using sqlplus. It also loads all readable wordlists named
+/usr/share/rlwrap/completions/sqlplus.*
+.SH USAGE
+Set the $SQLPATH environment variable to where you want sqlwrap to 
+search for sql scripts. Like with $PATH it can be colon separated
+i.e. 
+.br
+export SQLPATH=/usr/local/sql:/usr/share/sql:$HOME/sql
+.P
+Note that, unlike the Linux shell,
+.B sqlwrap
+will also search each path's subdirectories. 
+Run sqlwrap like you would sqlplus, or use an alias 
+(this is already done via the bash profile if installed via RPM or 'make'):
+.P
+alias sqlplus='sqlwrap '
+.P
+Make sure sqlplus starts with a message like this:
+.P
+Loading sqlwrap plugin with 6224 completion words
+.P
+In sqlplus, type '@' after the command prompt and press TAB twice to see all SQL script completions,
+or type the first 2 characters of a keyword followed by two TABs.
+.P
+All the usual rlwrap features also work, such as command history with up/down keys etc.
+.PP
+SQL scripts must have '.sql' as extension.
+.SH OPTIONS
+All parameters are passed on to 'sqlplus'.
+.SH WORDLISTS
+.B sqlwrap
+reads wordlists from /usr/share/rlwrap/completions/sqlplus.* if the files are readable.
+Files that are not readable are skipped.
+.P
+The reason for having sqlwrap (actually, sqlplus_filter) read the wordlists is that if rlwrap would
+read the wordlists itself (with -f option or as completions/sqlplus file) it would pass over 6000 words
+from rlwrap to the filter executable each time you press TAB, which becomes terribly slow.
+.P
+By loading the wordlists only at startup and returning completions only if the word to be completed is
+2 characters or more, responsiveness dramatically increases.
+.P
+If you want to add additional words you can do so by adding wordlists 
+as /usr/share/rlwrap/completions/sqlplus.<customname>,
+or per-user as $HOME/.sqlplus_completions.
+.P
+You can also blacklist words by prepending them with '-'. Blacklisted words have priority over regular
+words, so any blacklisted word cannot be added again via another file.
+.P
+If you want to (temporarily) disable pre-configured wordlists, just make them non-readable i.e.
+.br
+chmod 000 /usr/share/rlwrap/completions/sqlplus.list
+.SH ENVIRONMENT
+$SQLPATH \- contains a colon\-separated list of directories where *.sql scripts are
+to be found.
+.br
+$ORACLE_HOME - must be set and $PATH must contain sqlplus.
+.br
+$RLWRAP_HOME - if set, contains the (alternative) directory for wordlists (i.e. $HOME/completions)
+.br
+$RLWRAP_FILTERDIR - if set, rlwrap will look for the sqlplus_filter perl script there
+(use if you cannot install sqlwrap as root i.e. $HOME/filters)
+.P
+See rlwrap(1) for more info on $RLWRAP_HOME and $RLWRAP_FILTERDIR.
+.SH FILES
+/usr/bin/sqlwrap
+- Wrapper for rlwrap to call it with the correct parameters
+.br
+/usr/share/rlwrap/filters/sqlplus_filter
+- completion script for rlwrap(1)
+.br
+/usr/share/rlwrap/completions/sqlplus.*
+Word lists for SQL*Plus
+.br
+/usr/share/sqlwrap/
+- SQL Scripts to create the word lists from Oracle
+.br
+/etc/profile.d/sqlwrap.sh
+- Sets the alias sqlplus='sqlwrap '
+.SH BUGS AND ISSUES
+- rlwrap gets real slow when preloading large lists of words (-f <file>, $HOME/.sqlplus_completions) and passing it to
+filters. This is not an
+.B sqlwrap
+bug but rather the way rlwrapfilter is implemented. Only use this for a few words, otherwise create an sqlplus.* file.
+.P
+.SH COPYRIGHT
+Copyright \(co 2018 Bart Sjerps <bart@outrun.nl>
+.PP
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+.PP
+This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
+.PP
+If you have suggestions for improvements in this tool, please send them along via the above address.
+.SH "SEE ALSO"
+rlwrap(1), RlwrapFilter(3pm)

@@ -1,0 +1,162 @@
+#!/usr/bin/env perl
+#============================================================================
+# Title       : sqlplus_filter
+# Description : Command and file completion for rlwrap/sqlplus
+# Author      : Bart Sjerps <bart@outrun.nl>
+# License     : GPLv3+
+# More info   : see rlwrap(1), RlwrapFilter(3pm), sqlwrap(1)
+# ---------------------------------------------------------------------------
+# This script is part of sqlwrap(1) and called by 'sqlwrap' when 
+# running rlwrap with sqlplus when using option '-z sqlplus_filter'
+# The script should be placed in /usr/share/rlwrap/filters/ for rlwrap to
+# be found.
+#
+# It will enable rlwrap completion of scripts when called by @<scriptname>
+# for scripts with extension '.sql' that reside in $SQLPATH.
+# It will also enable completion of all sqlplus.* completion files.
+# SQLPATH is the set of paths where Oracle (SQLPLUS) will look for scripts.
+#
+# Note that rlwrap by default defines '@' as a break character and we don't
+# want that, so call rlwrap like this:
+# rlwrap -U -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus
+#
+# You can still add a tab-completion wordlist file with the -f option or by
+# adding it to the /completions folder but beware that very long wordlists
+# cause rlwrap to slow down. This is why sqlplus_filter reads wordlists itself
+# only at startup from /usr/share/rlwrap/sqlplus.*
+#
+# This results in good performance as well as 
+# not throwing 10,000+ words at the user
+# when entering TAB TAB on an empty prompt.
+# 
+
+# Initialization
+use lib ($ENV{RLWRAP_FILTERDIR} or ".");
+use RlwrapFilter;
+use strict;
+use File::Find;
+use IO::Handle;
+
+my $banner = "Loading sqlwrap plugin";
+my $share  = '/usr/share/rlwrap/completions/';
+
+# Debug
+# open (my $logfh, '>', '/tmp/debug') or die "aaaaaarrgh: $!\n";
+# $logfh->autoflush;
+
+# return an array of words from a file, skip if not readable
+sub loadwords {
+  my ($name, $rest) = @_;
+  my @words;
+  my @list;
+  if(!(-r $name )) {
+    return @list
+  }
+  # print "Loading wordlist: " . $name . "\n";
+  open(my $file, '<' , $name) or die $!, ' ', $name;
+  while(<$file>) {
+    chomp;
+    @words = split(' ');
+    foreach my $word (@words) { push @list, $word; }
+  }
+  close ($file);
+  return @list
+}
+
+# load the wordlists
+# Using a huge fixed wordlist (over 10000 words) loaded 
+# by rlwrap and then passed to a perl function
+# turned out to be too slow causing unresponsive prompt,
+# so we # let the perl filter load them directly,
+# only once upon startup so we don't have to pass them each
+# time the user enters TAB.
+
+my @wordlist;
+my @blacklist;
+foreach my $fp (glob($share . "sqlplus.*")) {
+  my @newwords = loadwords($fp);
+  push @wordlist, grep /^[A-z].*/, @newwords;
+  push @blacklist, map { s/^-//; $_ } grep /^-/, @newwords;
+}
+
+# eliminate dupes and remove blacklisted
+my %wordhash;
+@wordhash { @wordlist } = ();    # hash can only have unique values
+delete @wordhash { @blacklist }; # remove blacklisted words
+@wordlist = keys %wordhash;      # convert hash back to array
+
+# Tell user how many words we have
+$banner .= " with " . scalar @wordlist . " completion words";
+
+# Define the completion filter
+my $filter = new RlwrapFilter;
+
+$filter -> help_text("Usage: rlwrap [-options] -U -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus\n".
+		     "command-completion for sqlplus listing all sql files in SQLPATH plus wordlists");
+
+$filter -> completion_handler(\&complete);
+$filter -> send_output_oob($banner);
+$filter -> run;
+
+# callback function for File::find, push all files that end with .sql
+# into global @files array
+my @files;
+sub wanted {
+  return unless /\.sql$/;
+  push @files, $File::Find::name;
+}
+
+# The subroutine doing the actual work. When called with '@', 
+# it returns all .sql scripts in $SQLPATH and $PWD
+# else it completes the wordlists (if prefix is at least 2 chars)
+sub complete {
+  my($line, $prefix, @completions) =@_;
+
+  my $nwords = scalar split /\s+/, $line;
+  my $nchars = length $prefix; 
+  my $first = substr($line, 0, 1);
+  my @sql;
+
+  # print $logfh "L:",$line," P:",$prefix," W:", $nwords, " C:",@completions,"\n"; # debug
+
+  # construct the list of SQL scripts
+  my $homedir = $ENV{'PWD'};
+  my $sqlpath = $ENV{'SQLPATH'};
+  my @dirs = split /:/, $sqlpath;
+  push @dirs, $homedir;
+
+  # only complete sql script if we started with '@' and only have one word
+  # otherwise we don't bother scanning for .sql files
+  if ($first eq "@" && $nwords == 1) {
+    # Get the full list of sql files, follow symlinks
+    @files = ();
+    find( { wanted => \&wanted, follow => 1, follow_skip => 2 }, @dirs);
+    push @sql, @files;
+    # Remove SQLPATH prefixes from the file names
+    for (@dirs) {
+      my $dir = $_;
+      for (@sql) { s/$dir\///; }
+    }
+    # Remove .sql extension and add @ as prefix to the file names
+    for (@sql) { s/.sql$//; s/^/@/; }
+
+    # return all files that match the prefix
+    push @completions, grep /^$prefix/, @sql; 
+    return @completions;
+  }
+
+  # if we get here, we're completing normal words, not SQL scripts
+  # replace '$' with '\$' to avoid 'grep' treating it as line-end marker
+  # i.e. when completing something like v$database
+  $prefix =~ s/\$/\\\$/;
+
+  if($nchars >= 2) {
+    # only add these completions if prefix is at least 2 characters already
+    # This speeds up sqlwrap and prevents showing all 6000+ words to the user
+    push @completions, grep /^$prefix/i, @wordlist;
+  }
+
+  return @completions;
+}
+
+

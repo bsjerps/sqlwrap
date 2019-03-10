@@ -1,0 +1,26 @@
+#!/bin/bash
+#============================================================================
+# Title       : make-wordlists
+# Description : Generates wordlists for rlwrap/sqlplus completion
+# Author      : Bart Sjerps <bart@outrun.nl>
+# License     : GPLv3+
+# ---------------------------------------------------------------------------
+
+# run ls-reserved.sql first to create /tmp/sqlplus.objects
+
+test -f /tmp/sqlplus.objects || exit 10
+
+# create wordlist for different categories
+
+grep '^ALL_'     /tmp/sqlplus.objects > /tmp/sqlplus.all_tables
+grep '^CDB_'     /tmp/sqlplus.objects > /tmp/sqlplus.cdb
+grep '^DBA'      /tmp/sqlplus.objects > /tmp/sqlplus.dba
+grep '^DBMS'     /tmp/sqlplus.objects > /tmp/sqlplus.dbms
+grep '^USER_'    /tmp/sqlplus.objects > /tmp/sqlplus.user
+grep '^GV\$'     /tmp/sqlplus.objects > /tmp/sqlplus.gvdollar
+grep '^V\$'      /tmp/sqlplus.objects > /tmp/sqlplus.vdollar
+
+# create an additional list with various words
+grep -E '^AWR|^COMPRESS|^DATABASE|^FILE|^GLOBAL|^HEAT|^PLAN_|^RECYCLEBIN|^REDO|^RESOURCE|^ROLE|^SCN|^SQL|^SYS_' \
+  /tmp/sqlplus.objects > /tmp/sqlplus.various
+
