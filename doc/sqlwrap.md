@@ -39,7 +39,9 @@ export SQLPATH=/usr/local/sql:/usr/share/sql:$HOME/sql
 
 Note that, unlike the Linux shell,
 <B>sqlwrap</B>
-will also search each path's subdirectories. 
+will also search each path's subdirectories. If you want to have sqlwrap also
+search the current working directory's subdirs, add '.' to SQLPATH.
+
 Run sqlwrap like you would sqlplus, or use an alias 
 (this is already done via the bash profile if installed via RPM or 'make'):
 
@@ -169,6 +171,6 @@ If you have suggestions for improvements in this tool, please send them along vi
 This document was created by
 <A HREF="http://localhosthttps://linux.die.net/man/1/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 15:08:37 GMT, March 09, 2019
+Time: 11:43:51 GMT, March 18, 2019
 </BODY>
 </HTML>
