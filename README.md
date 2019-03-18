@@ -66,6 +66,9 @@ See below for an example of sqlwrap in action.
 
 ![example1](https://bsjerps.github.io/images/sqlwrap-demo.gif)
 
+# Blogpost
+[SQLWrap to the rescue](https://bartsjerps.com/2019/03/18/sqlwwrap-to-the-rescue/)
+
 
 # Future
 - Better wordlists?
