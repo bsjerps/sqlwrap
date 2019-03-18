@@ -23,7 +23,9 @@ export SQLPATH=/usr/local/sql:/usr/share/sql:$HOME/sql
 .P
 Note that, unlike the Linux shell,
 .B sqlwrap
-will also search each path's subdirectories. 
+will also search each path's subdirectories. If you want to have sqlwrap also
+search the current working directory's subdirs, add '.' to SQLPATH.
+.P
 Run sqlwrap like you would sqlplus, or use an alias 
 (this is already done via the bash profile if installed via RPM or 'make'):
 .P

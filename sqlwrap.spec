@@ -1,6 +1,6 @@
 Name:		sqlwrap
 Summary:	filename and command completion for SQL*Plus using rlwrap
-Version:	0.1.6.1
+Version:	0.1.7.1
 Release:	1%{?dtap}
 BuildArch:	noarch
 URL:		https://github.com/outrunnl/sqlwrap
@@ -8,6 +8,7 @@ Source0:	%{name}-%{version}.tbz2
 License:	GPLv3+
 Group:		Outrun/Extras
 Requires:	rlwrap >= 0.42
+#               Backward compatibility, to be removed in the future:
 Provides:	sqlpluscomplete
 Obsoletes:	sqlpluscomplete
 

@@ -38,7 +38,7 @@ use File::Find;
 use IO::Handle;
 
 my $banner = "Loading sqlwrap plugin";
-my $share = ($ENV{'RLWRAP_HOME'} or '/usr/share/rlwrap/completions') . '/';
+my $share  = '/usr/share/rlwrap/completions/';
 
 # Debug
 # open (my $logfh, '>', '/tmp/debug') or die "aaaaaarrgh: $!\n";
@@ -120,10 +120,8 @@ sub complete {
   # print $logfh "L:",$line," P:",$prefix," W:", $nwords, " C:",@completions,"\n"; # debug
 
   # construct the list of SQL scripts
-  my $homedir = $ENV{'PWD'};
   my $sqlpath = $ENV{'SQLPATH'};
   my @dirs = split /:/, $sqlpath;
-  push @dirs, $homedir;
 
   # only complete sql script if we started with '@' and only have one word
   # otherwise we don't bother scanning for .sql files
@@ -132,6 +130,8 @@ sub complete {
     @files = ();
     find( { wanted => \&wanted, follow => 1, follow_skip => 2 }, @dirs);
     push @sql, @files;
+    # Add sql files in the current working dir
+    push @sql, glob '*.sql';
     # Remove SQLPATH prefixes from the file names
     for (@dirs) {
       my $dir = $_;
