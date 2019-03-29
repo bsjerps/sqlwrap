@@ -95,7 +95,9 @@ $filter -> help_text("Usage: rlwrap [-options] -U -i -b '()=!<>&+*|:;,' -z sqlpl
 		     "command-completion for sqlplus listing all sql files in SQLPATH plus wordlists");
 
 $filter -> completion_handler(\&complete);
-$filter -> send_output_oob($banner);
+if($filter->running_under_rlwrap) {
+  $filter -> send_output_oob($banner);
+}
 $filter -> run;
 
 # callback function for File::find, push all files that end with .sql
