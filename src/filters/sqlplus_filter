@@ -124,10 +124,11 @@ sub complete {
   # construct the list of SQL scripts
   my $sqlpath = $ENV{'SQLPATH'};
   my @dirs = split /:/, $sqlpath;
+  for (@dirs) { s/\/$//; }
 
   # only complete sql script if we started with '@' and only have one word
   # otherwise we don't bother scanning for .sql files
-  if ($first eq "@" && $nwords == 1) {
+  if ($first eq "@" && $nchars > 0 && $nwords == 1) {
     # Get the full list of sql files, follow symlinks
     @files = ();
     find( { wanted => \&wanted, follow => 1, follow_skip => 2 }, @dirs);

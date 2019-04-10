@@ -12,7 +12,7 @@ die() { echo "$(basename $0) error: $@" >&2 ; exit 10 ; }
 test -x /usr/bin/sqlwrap || export RLWRAP_HOME=$HOME/sqlwrap/completions RLWRAP_FILTERDIR=$HOME/sqlwrap/filters/
 
 case $1 in
-  -\?) man $(basename $0) ; exit;;
+  -\?|--help) man $(basename $0) ; exit;;
 esac
 
 test -x /usr/bin/rlwrap          || die "rlwrap not found"
