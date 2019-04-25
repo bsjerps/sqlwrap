@@ -122,7 +122,7 @@ sub complete {
   # print $logfh "L:",$line," P:",$prefix," W:", $nwords, " C:",@completions,"\n"; # debug
 
   # construct the list of SQL scripts
-  my $sqlpath = $ENV{'SQLPATH'};
+  my $sqlpath = ($ENV{'SQLPATH'} or "/foo");
   my @dirs = split /:/, $sqlpath;
   for (@dirs) { s/\/$//; }
 
