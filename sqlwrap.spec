@@ -1,6 +1,6 @@
 Name:		sqlwrap
 Summary:	filename and command completion for SQL*Plus using rlwrap
-Version:	0.1.7.9
+Version:	0.1.8.0
 Release:	1%{?dtap}
 BuildArch:	noarch
 URL:		https://github.com/outrunnl/sqlwrap
@@ -17,9 +17,19 @@ Provides TAB completion for SQL*Plus filenames and commands using rlwrap
 
 %install
 rm -rf %{buildroot}
+install -m 0755 -d %{buildroot}/etc
 install -m 0755 -d %{buildroot}/usr/bin
-install -m 0755 -d %{buildroot{/usr/share/%{name}
-install -m 0755 -d %{buildroot{/usr/share/doc/%{name}
+install -m 0755 -d %{buildroot}/usr/share/%{name}
+install -m 0755 -d %{buildroot}/usr/share/rlwrap
+install -m 0755 -d %{buildroot}/usr/share/doc/%{name}
+install -m 0755 -d %{buildroot}/usr/share/man/man1
+
+cp -p  bin/*    %{buildroot}/usr/bin
+cp -p  doc/*    %{buildroot}/usr/share/doc/%{name}
+cp -pr etc/*    %{buildroot}/etc
+cp -p  share/*  %{buildroot}/usr/share/%{name}
+cp -p  man1/*   %{buildroot}/usr/share/man/man1
+cp -pr rlwrap/* %{buildroot}/usr/share/rlwrap/
 
 %files
 /usr/share/doc/%{name}
