@@ -1,10 +1,17 @@
 #!/bin/bash
 #============================================================================
-# Title       : sqlwrap
+# Title       : sqlwrap_secure
 # Description : Wrapper script for sqlplus with rlwrap and completion
 # Author      : Bart Sjerps <bart@outrun.nl>
 # License     : GPLv3+
 # ---------------------------------------------------------------------------
+# This version of sqlwrap uses -U (--mirror-arguments) to hide
+# potential passwords on the cmdline.
+# As this currently results in some (harmless but annoying) 
+# warnings from rlwrap, this is disabled in sqlwrap and provided via this
+# version instead. To be removed when rlwrap issue #99 is solved.
+#
+# See https://github.com/hanslub42/rlwrap/issues/99
 
 die() { echo "$(basename $0) error: $@" >&2 ; exit 10 ; }
 
@@ -19,4 +26,4 @@ test -x /usr/bin/rlwrap          || die "rlwrap not found"
 test -d $ORACLE_HOME             || die "ORACLE_HOME not found"
 test -x $ORACLE_HOME/bin/sqlplus || die "sqlplus not found"
 
-exec rlwrap -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"
+exec rlwrap -U -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"

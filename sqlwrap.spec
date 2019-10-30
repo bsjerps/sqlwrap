@@ -1,6 +1,6 @@
 Name:		sqlwrap
 Summary:	filename and command completion for SQL*Plus using rlwrap
-Version:	0.1.8.0
+Version:	0.1.8.1
 Release:	1%{?dtap}
 BuildArch:	noarch
 URL:		https://github.com/outrunnl/sqlwrap
@@ -40,5 +40,5 @@ cp -pr rlwrap/* %{buildroot}/usr/share/rlwrap/
 %verify(not mode) /usr/share/rlwrap/completions/*
 /usr/share/man/man1/sqlwrap.1.gz
 %defattr(0755,root,root)
-/usr/bin/sqlwrap
+/usr/bin/sqlwrap*
 /usr/share/rlwrap/filters/sqlplus_filter
