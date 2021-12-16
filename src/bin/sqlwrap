@@ -8,6 +8,9 @@
 
 die() { echo "$(basename $0) error: $@" >&2 ; exit 10 ; }
 
+# Workaround for rlwrap bug 'rlwrap would always open /tmp/rlwrap.debug after forking child command' (fixed in 0.45.2)
+touch /tmp/rlwrap.debug && chmod 666 /tmp/rlwrap.debug
+
 # Run sqlwrap from $HOME/bin (non-root), we assume /usr/bin/sqlwrap does not exist:
 test -x /usr/bin/sqlwrap || export RLWRAP_HOME=$HOME/sqlwrap/completions RLWRAP_FILTERDIR=$HOME/sqlwrap/filters/
 
@@ -19,4 +22,4 @@ test -x /usr/bin/rlwrap          || die "rlwrap not found"
 test -d $ORACLE_HOME             || die "ORACLE_HOME not found"
 test -x $ORACLE_HOME/bin/sqlplus || die "sqlplus not found"
 
-exec rlwrap -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"
+exec /usr/bin/rlwrap -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"
