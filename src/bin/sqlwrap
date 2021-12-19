@@ -8,9 +8,6 @@
 
 die() { echo "$(basename $0) error: $@" >&2 ; exit 10 ; }
 
-# Workaround for rlwrap bug 'rlwrap would always open /tmp/rlwrap.debug after forking child command' (fixed in 0.45.2)
-touch /tmp/rlwrap.debug && chmod 666 /tmp/rlwrap.debug
-
 # Run sqlwrap from $HOME/bin (non-root), we assume /usr/bin/sqlwrap does not exist:
 test -x /usr/bin/sqlwrap || export RLWRAP_HOME=$HOME/sqlwrap/completions RLWRAP_FILTERDIR=$HOME/sqlwrap/filters/
 
