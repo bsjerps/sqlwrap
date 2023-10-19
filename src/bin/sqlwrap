@@ -19,4 +19,4 @@ test -x /usr/bin/rlwrap          || die "rlwrap not found"
 test -d $ORACLE_HOME             || die "ORACLE_HOME not found"
 test -x $ORACLE_HOME/bin/sqlplus || die "sqlplus not found"
 
-exec /usr/bin/rlwrap -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"
+exec /usr/bin/rlwrap -c -i -b '()=!<>&+*|:;,' -z sqlplus_filter sqlplus "$@"
