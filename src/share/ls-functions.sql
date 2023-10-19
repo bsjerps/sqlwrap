@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- Title       : ls-functions.sql
 -- Description : Lists packages, procedures and functions from all_objects
--- Author      : Bart Sjerps <bart@outrun.nl>
+-- Author      : Bart Sjerps <bart@dirty-cache.com>
 -- License     : GPLv3+
 -----------------------------------------------------------------------------
 -- All tables 

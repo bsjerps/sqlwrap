@@ -2,7 +2,7 @@
 #============================================================================
 # Title       : make-wordlists
 # Description : Generates wordlists for rlwrap/sqlplus completion
-# Author      : Bart Sjerps <bart@outrun.nl>
+# Author      : Bart Sjerps <bart@dirty-cache.com.nl>
 # License     : GPLv3+
 # ---------------------------------------------------------------------------
 

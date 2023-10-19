@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- Title       : ls-reserved.sql
 -- Description : Shows reserved words in SQL*Plus
--- Author      : Bart Sjerps <bart@outrun.nl>
+-- Author      : Bart Sjerps <bart@dirty-cache.com>
 -- License     : GPLv3+
 -----------------------------------------------------------------------------
 -- Shows reserved words with length 3 or more from v$reserved words

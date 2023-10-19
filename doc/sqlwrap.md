@@ -136,7 +136,7 @@ bug but rather the way rlwrapfilter is implemented. Only use this for a few word
 <A NAME="lbAK">&nbsp;</A>
 <H2>COPYRIGHT</H2>
 
-Copyright &#169; 2018 Bart Sjerps &lt;<A HREF="mailto:bart@outrun.nl">bart@outrun.nl</A>&gt;
+Copyright &#169; 2018 Bart Sjerps &lt;<A HREF="mailto:bart@dirty-cache.com">bart@dirty-cache.com</A>&gt;
 <P>
 
 License GPLv3+: GNU GPL version 3 or later &lt;<A HREF="http://gnu.org/licenses/gpl.html">http://gnu.org/licenses/gpl.html</A>&gt;.

@@ -2,7 +2,7 @@
 #============================================================================
 # Title       : sqlwrap
 # Description : Wrapper script for sqlplus with rlwrap and completion
-# Author      : Bart Sjerps <bart@outrun.nl>
+# Author      : Bart Sjerps <bart@dirty-cache.com>
 # License     : GPLv3+
 # ---------------------------------------------------------------------------
 

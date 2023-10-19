@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- Title       : ls-objects.sql
 -- Description : Lists objects from all_objects type VIEW, TABLE, SYNONYM
--- Author      : Bart Sjerps <bart@outrun.nl>
+-- Author      : Bart Sjerps <bart@dirty-cache.com>
 -- License     : GPLv3+
 -----------------------------------------------------------------------------
 -- All tables 

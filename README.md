@@ -39,7 +39,7 @@ It is recommended to install via YUM (See [Installation](# Installation)).
 ## from YUM repository (recommended)
 
 ```
-yum install http://yum.outrun.nl/outrun-extras.rpm
+yum install https://yum.dirty-cache.com/dcrepo-release.rpm
 yum install sqlwrap
 ```
 

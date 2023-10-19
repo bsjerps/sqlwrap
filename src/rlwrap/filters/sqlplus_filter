@@ -2,7 +2,7 @@
 #============================================================================
 # Title       : sqlplus_filter
 # Description : Command and file completion for rlwrap/sqlplus
-# Author      : Bart Sjerps <bart@outrun.nl>
+# Author      : Bart Sjerps <bart@dirty-cache.com>
 # License     : GPLv3+
 # More info   : see rlwrap(1), RlwrapFilter(3pm), sqlwrap(1)
 # ---------------------------------------------------------------------------

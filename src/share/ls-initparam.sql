@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- Title       : ls-initparam.sql
 -- Description : Shows init parameters
--- Author      : Bart Sjerps <bart@outrun.nl>
+-- Author      : Bart Sjerps <bart@dirty-cache.com>
 -- License     : GPLv3+
 -----------------------------------------------------------------------------
 -- All init parameters except the hidden ones (_%)
